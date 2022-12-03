@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Configuring GPIO pins"
+config-pin p9.12 gpio
+config-pin p9.15 gpio
+echo "Starting build for project.cpp"
+g++ project.cpp -lpaho-mqtt3c -o project
+echo "Finishing build for project.cpp"
