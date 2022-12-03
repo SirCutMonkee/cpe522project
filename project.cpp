@@ -4,7 +4,7 @@
 * Adapted from subscribe.cpp and publish.cpp in ~/exploringBB/chp11/adafruit
 * To call this program use: virtualLEDSwitch
 * This program takes no arguments and will output the ambient temperature and
-* take the state of a heater as an input on:
+* take the state of a heater and air conditioner as inputs on:
 *   https://io.adafruit.com/JoshuaRyan99/dashboards/beaglebone-temperature
 */
 
