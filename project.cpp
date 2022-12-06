@@ -66,8 +66,9 @@ void connlost(void *context, char *cause) {
     printf("     cause: %s\n", cause);
 }
 
-void publish(const char *topicName, int val){
+void publish(MQTTClient client, const char *topicName, int val){
     int rc;
+    char str_payload[100];
     MQTTClient_message pubmsg = MQTTClient_message_initializer;
     MQTTClient_deliveryToken token;    
     sprintf(str_payload, "%f", val);    
@@ -81,7 +82,7 @@ void publish(const char *topicName, int val){
     }
 }
 
-void subscribe(MQTTClient client;){
+void subscribe(MQTTClient client){
     int rc;
     char str_payload[100];
     string tpc2 = TOPIC2;
@@ -115,26 +116,27 @@ int main(int argc, char* argv[]) {
     GPIO_VALUE lastState;
     GPIO_VALUE currentState;
     currentState = button.getValue();
-    lastState = !currentState;
+    if(currentState == LOW) lastState = HIGH;
+    else lastState = LOW;
 
     MQTTClient client;    
     subscribe(client);
     
     while(1){
         if(currentState != lastState){
-            if(currentState == HIGH) publish(TOPIC4, 0);
-            else publish(TOPIC4, 1);
+            if(currentState == HIGH) publish(client, TOPIC4, 0);
+            else publish(client, TOPIC4, 1);
             lastState = currentState;
         }
         currentState = button.getValue();
         
         if(cntr >=100000){
-            temp = tempSensor.readADCSample()
-            publish(TOPIC1, temp);
-            publish(TOPIC5, temp);
-            //publish(TOPIC6, temp);
-            //publish(TOPIC7, temp);
-            //publish(TOPIC8, temp);
+            temp = tempSensor.readADCSample();
+            publish(client, TOPIC1, temp);
+            publish(client, TOPIC5, temp);
+            //publish(client, TOPIC6, temp);
+            //publish(client, TOPIC7, temp);
+            //publish(client, TOPIC8, temp);
             cntr = 0;
         }
         else{
@@ -152,6 +154,6 @@ int main(int argc, char* argv[]) {
 
     MQTTClient_disconnect(client, 10000);
     MQTTClient_destroy(&client);
-    return rc;
+    return 0;
 }
 
