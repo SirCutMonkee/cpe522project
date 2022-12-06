@@ -28,6 +28,7 @@ using namespace exploringBB;
 #define TOPIC2      "JoshuaRyan99/feeds/weather.heater"
 #define TOPIC3      "JoshuaRyan99/feeds/weather.led"
 #define TOPIC4      "JoshuaRyan99/feeds/weather.button"
+#define TOPIC4      "bareleus/feeds/weather.joshuatemp"
 #define QOS         1
 #define TIMEOUT     10000L
 
@@ -98,6 +99,7 @@ void subscribe(MQTTClient client;){
 
 int main(int argc, char* argv[]) {    
     int cntr = 0;
+    int temp;
     AnalogIn tempSensor(0);
     GPIO led(60);
     GPIO heater(48);
@@ -123,8 +125,10 @@ int main(int argc, char* argv[]) {
         currentState = button.getValue();
         
         if(cntr >=100000){
-           publish(TOPIC1, tempSensor.readADCSample());
-           cntr = 0;
+            temp = tempSensor.readADCSample()
+            publish(TOPIC1, temp);
+            publish(TOPIC5, temp);
+            cntr = 0;
         }
         else{
             int numRead;
