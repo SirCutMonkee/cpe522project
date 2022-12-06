@@ -42,6 +42,10 @@ void delivered(void *context, MQTTClient_deliveryToken dt) {
 }
 
 int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *message) {
+    static GPIO led(60);
+    static GPIO heater(48);
+    led.setDirection(OUTPUT);
+    heater.setDirection(OUTPUT);    
     int i;
     char* payloadptr;
     payloadptr = (char*) message->payload;
@@ -103,13 +107,10 @@ void subscribe(MQTTClient client;){
 int main(int argc, char* argv[]) {    
     int cntr = 0;
     int temp;
-    AnalogIn tempSensor(0);
-    GPIO led(60);
-    GPIO heater(48);
-    GPIO button(46);
     
-    led.setDirection(OUTPUT);
-    heater.setDirection(OUTPUT);
+    AnalogIn tempSensor(0);
+    
+    GPIO button(46);
     button.setDirection(INPUT);
     GPIO_VALUE lastState;
     GPIO_VALUE currentState;
