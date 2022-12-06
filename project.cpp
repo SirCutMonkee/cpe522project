@@ -2,9 +2,9 @@
 * by Joshua Ryan
 * CPE 522 Team Project
 * Adapted from subscribe.cpp and publish.cpp in ~/exploringBB/chp11/adafruit
-* To call this program use: virtualLEDSwitch
-* This program takes no arguments and will output the ambient temperature and
-* take the state of a heater and air conditioner as inputs on:
+* To call this program use: project
+* This program takes no arguments and will output the ambient temperature and state of a pushbutton, and
+* take the state of a heater and momentary button as inputs on:
 *   https://io.adafruit.com/JoshuaRyan99/dashboards/beaglebone-temperature
 */
 
@@ -30,9 +30,6 @@ using namespace exploringBB;
 #define TOPIC4      "JoshuaRyan99/feeds/weather.button"
 #define QOS         1
 #define TIMEOUT     10000L
-//#define LED_GPIO    "/sys/class/gpio/"
-//#define ADC_PATH    "/sys/bus/iio/devices/iio:device0/in_voltage"
-//#define ADC         0
 
 volatile MQTTClient_deliveryToken deliveredtoken;
 
