@@ -29,9 +29,9 @@ using namespace exploringBB;
 #define TOPIC3      "JoshuaRyan99/feeds/weather.led"
 #define TOPIC4      "JoshuaRyan99/feeds/weather.button"
 #define TOPIC5      "bareleus/feeds/weather.joshuatemp"
-#define TOPIC6      "EmbeddedSp3zz/feeds/weather.joshuatemp"
-#define TOPIC7      "bareleus/feeds/weather.joshuatemp"
-#define TOPIC8      "bareleus/feeds/weather.joshuatemp"
+//#define TOPIC6      "EmbeddedSp3zz/feeds/weather.joshuatemp"
+//#define TOPIC7      "bareleus/feeds/weather.joshuatemp"
+//#define TOPIC8      "bareleus/feeds/weather.joshuatemp"
 #define QOS         1
 #define TIMEOUT     10000L
 
