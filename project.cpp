@@ -119,7 +119,8 @@ int main(int argc, char* argv[]) {
     
     while(1){
         if(currentState != lastState){
-            publish(TOPIC4, currentState);
+            if(currentState == HIGH) publish(TOPIC4, 0);
+            else publish(TOPIC4, 1);
             lastState = currentState;
         }
         currentState = button.getValue();
