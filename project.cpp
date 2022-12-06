@@ -28,7 +28,10 @@ using namespace exploringBB;
 #define TOPIC2      "JoshuaRyan99/feeds/weather.heater"
 #define TOPIC3      "JoshuaRyan99/feeds/weather.led"
 #define TOPIC4      "JoshuaRyan99/feeds/weather.button"
-#define TOPIC4      "bareleus/feeds/weather.joshuatemp"
+#define TOPIC5      "bareleus/feeds/weather.joshuatemp"
+#define TOPIC6      "EmbeddedSp3zz/feeds/weather.joshuatemp"
+#define TOPIC7      "bareleus/feeds/weather.joshuatemp"
+#define TOPIC8      "bareleus/feeds/weather.joshuatemp"
 #define QOS         1
 #define TIMEOUT     10000L
 
@@ -128,6 +131,9 @@ int main(int argc, char* argv[]) {
             temp = tempSensor.readADCSample()
             publish(TOPIC1, temp);
             publish(TOPIC5, temp);
+            //publish(TOPIC6, temp);
+            //publish(TOPIC7, temp);
+            //publish(TOPIC8, temp);
             cntr = 0;
         }
         else{
