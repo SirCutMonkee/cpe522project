@@ -66,7 +66,7 @@ void connlost(void *context, char *cause) {
     printf("     cause: %s\n", cause);
 }
 
-void publish(MQTTClient client, const char *topicName, int val){
+void publish(MQTTClient *client, const char *topicName, float val){
     int rc;
     char str_payload[100];
     MQTTClient_message pubmsg = MQTTClient_message_initializer;
@@ -76,38 +76,15 @@ void publish(MQTTClient client, const char *topicName, int val){
     pubmsg.payloadlen = strlen(str_payload);
     pubmsg.qos = QOS;
     pubmsg.retained = 0;
-    MQTTClient_publishMessage(client, topicName, &pubmsg, &token);
-    if(rc = MQTTClient_waitForCompletion(client, token, TIMEOUT) != MQTTCLIENT_SUCCESS){
+    MQTTClient_publishMessage(*client, topicName, &pubmsg, &token);
+    if(rc = MQTTClient_waitForCompletion(*client, token, TIMEOUT) != MQTTCLIENT_SUCCESS){
         exit(-1);
     }
 }
 
-void subscribe(MQTTClient client){
-    int rc;
-    char str_payload[100];
-    string tpc2 = TOPIC2;
-    string tpc3 = TOPIC3;
-    char *const topicArray[2] ={strcpy(new char[tpc2.length()+1], tpc2.c_str()),
-     strcpy(new char[tpc3.length()+1], tpc3.c_str())};
-    int qos2 = 1;
-    int qos3 = 1;
-    int qosArray[2] = {qos2, qos3};
-    MQTTClient_connectOptions opts = MQTTClient_connectOptions_initializer;
-    MQTTClient_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
-    opts.keepAliveInterval = 0;
-    opts.cleansession = 1;
-    opts.username = getenv("IO_USERNAME");
-    opts.password = getenv("IO_KEY");
-    MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);   
-    if ((rc = MQTTClient_connect(client, &opts)) != MQTTCLIENT_SUCCESS) {
-        exit(-1);
-    }    
-    MQTTClient_subscribeMany(client, 2, topicArray, qosArray);
-}
-
 int main(int argc, char* argv[]) {    
     int cntr = 0;
-    int temp;
+    float temp;
     
     AnalogIn tempSensor(0);
     
@@ -119,24 +96,44 @@ int main(int argc, char* argv[]) {
     if(currentState == LOW) lastState = HIGH;
     else lastState = LOW;
 
-    MQTTClient client;    
-    subscribe(client);
+    int rc;
+    char str_payload[100];
+    string tpc2 = TOPIC2;
+    string tpc3 = TOPIC3;
+    char *const topicArray[2] ={strcpy(new char[tpc2.length()+1], tpc2.c_str()),
+     strcpy(new char[tpc3.length()+1], tpc3.c_str())};
+    int qos2 = 1;
+    int qos3 = 1;
+    int qosArray[2] = {qos2, qos3};
+
+    MQTTClient client; 
+    MQTTClient_connectOptions opts = MQTTClient_connectOptions_initializer;
+    MQTTClient_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
+    opts.keepAliveInterval = 0;
+    opts.cleansession = 1;
+    opts.username = getenv("IO_USERNAME");
+    opts.password = getenv("IO_KEY");
+    MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);   
+    if ((rc = MQTTClient_connect(client, &opts)) != MQTTCLIENT_SUCCESS) {
+        exit(-1);
+    }    
+    MQTTClient_subscribeMany(client, 2, topicArray, qosArray);
     
     while(1){
         if(currentState != lastState){
-            if(currentState == HIGH) publish(client, TOPIC4, 0);
-            else publish(client, TOPIC4, 1);
+            if(currentState == HIGH) publish(&client, TOPIC4, 0);
+            else publish(&client, TOPIC4, 1);
             lastState = currentState;
         }
         currentState = button.getValue();
         
         if(cntr >=100000){
-            temp = tempSensor.readADCSample();
-            publish(client, TOPIC1, temp);
-            publish(client, TOPIC5, temp);
-            //publish(client, TOPIC6, temp);
-            //publish(client, TOPIC7, temp);
-            //publish(client, TOPIC8, temp);
+            temp = 25.0f+((tempSensor.readADCSample()*(1.80f/4096.0f)-0.75f)/0.01f); 
+            publish(&client, TOPIC1, temp);
+            publish(&client, TOPIC5, temp);
+            //publish(&client, TOPIC6, temp);
+            //publish(&client, TOPIC7, temp);
+            //publish(&client, TOPIC8, temp);
             cntr = 0;
         }
         else{

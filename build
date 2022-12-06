@@ -7,5 +7,5 @@ config-pin -l p8.16
 config-pin p8.16 gpio_pu
 config-pin -q p8.16
 echo "Starting build for project.cpp"
-g++ project.cpp Analogin.cpp GPIO.cpp -lpaho-mqtt3c -o project
+g++ project.cpp Analogin.cpp GPIO.cpp -lpaho-mqtt3c -o project -pthread
 echo "Finishing build for project.cpp"
