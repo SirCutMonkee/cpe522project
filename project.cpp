@@ -29,7 +29,7 @@ using namespace exploringBB;
 #define TOPIC3      "JoshuaRyan99/feeds/weather.led"
 #define TOPIC4      "JoshuaRyan99/feeds/weather.button"
 #define TOPIC5      "bareleus/feeds/weather.joshuatemp"
-//#define TOPIC6      "EmbeddedSp3zz/feeds/weather.joshuatemp"
+#define TOPIC6      "EmbeddedSp3zz/feeds/cpe-project.joshuatemp"
 #define TOPIC7      "Bentan01/feeds/project-group.joshuatemp"
 #define TOPIC8      "anhprotien588/feeds/project.joshuatemperature"
 #define QOS         1
@@ -131,7 +131,7 @@ int main(int argc, char* argv[]) {
             temp = 25.0f+((tempSensor.readADCSample()*(1.80f/4096.0f)-0.75f)/0.01f); 
             publish(&client, TOPIC1, temp);
             publish(&client, TOPIC5, temp);
-            //publish(&client, TOPIC6, temp);
+            publish(&client, TOPIC6, temp);
             publish(&client, TOPIC7, temp);
             publish(&client, TOPIC8, temp);
             cntr = 0;
